@@ -1,19 +1,19 @@
-const mongoose=require('mongoose');
+import mongoose from 'mongoose';
 
-const userSchema=rew mongoose.Schema({
+const userSchema=new mongoose.Schema({
     fullName:{
         type:String,
-        required:tre
+        required:true
     },
-    email{
+    email:{
         type:String,
         required:true,
         unique:true,
     },
-    password{
+    password:{
         type:String,
     },
-    mobile{
+    mobile:{
         type:String,
         required:true,
     },
@@ -23,4 +23,8 @@ const userSchema=rew mongoose.Schema({
         required:true
     }
 
-},{timeStamps:true})
+},{timestamps:true})
+
+const User= mongoose.model('User',userSchema);
+
+export default User;
