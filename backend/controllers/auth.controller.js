@@ -1,8 +1,9 @@
 import bcrypt from "bcryptjs";
 import User from "../models/UserModel.js";
 import { genToken } from "../utils/token.js";
+import { sendOtpEmail } from "../utils/email.js";
 
-const signUp = async (req, res) => {
+ export const signUp = async (req, res) => {
     try {
         const { fullName, email, password, mobile, role } = req.body;
         const user = await User.findOne({ email });
@@ -41,10 +42,10 @@ const signUp = async (req, res) => {
     }
 }
 
-const signIn = async (req, res) => {
+ export const signIn = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ email });
+        let user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: "User not found" });
         }
@@ -65,7 +66,7 @@ const signIn = async (req, res) => {
     }
 }
 
-const signOut = async (req, res) => {
+ export const signOut = async (req, res) => {
     try {
         res.clearCookie("token");
         return res.status(200).json({ message: "Log Out Successfully" });
@@ -74,4 +75,26 @@ const signOut = async (req, res) => {
     }
 }
 
-export { signUp, signIn, signOut };
+export const sentOtp=async(req,res)=>{
+    try {
+        const {email}=req.body;
+        const user=await User.findOne({email});
+        if(!user){
+            return res.status(400).json({ message: "User not found" });
+        }
+        const otp=Math.floor(1000 + Math.random() * 9000).toString();
+        user.resetOtp=otp;
+        user.otpExpiry=Date.now()+5*60*1000;
+        user.isOtpVerified=false;
+        await user.save();
+       await  sendOtpEmail(email,otp);
+       return res.status(200).json({ message: "OTP sent to email" });       
+    }
+    catch(error){
+        return res.status(500).json({ message: `send otp error ${error}` });
+
+    }
+
+}
+
+

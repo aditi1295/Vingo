@@ -4,7 +4,7 @@ import { IoEyeOffSharp } from "react-icons/io5";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { serverUrl } from "../App";
+import { serverUrl } from "../App.jsx";
 
 function SignUp() {
   const primaryColor = "#ff4d2d";
@@ -28,7 +28,7 @@ function SignUp() {
         { fullName, email, mobile, password, role },
         { withCredentials: true }
       );
-      console.log(result.data);
+      console.log(result);
     } catch (err) {
       console.log(err);
     }
@@ -187,4 +187,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default SignUp; 
