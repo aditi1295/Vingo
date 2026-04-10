@@ -29,7 +29,7 @@ const userSchema=new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    otpexpires:{
+    otpExpiry:{
         type:Date
     },
 
