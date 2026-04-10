@@ -2,7 +2,8 @@ import React from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { useState } from "react";
 import axios from "axios";
-import { serverUrl } from "../App.jsx";
+import { useNavigate } from "react-router-dom";
+import { serverUrl } from "../App";
 
 function ForgotPassword() {
   const [step, setStep] = useState(1);
@@ -10,41 +11,41 @@ function ForgotPassword() {
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const navigate = useNavigate();
+  
   
   const handleSendOtp=async()=>{
     try {
-      const result=axios.post(`${serverUrl}/api/auth/send-otp`,{email},
+      const result= await axios.post(`${serverUrl}/api/auth/send-otp`,{email},
       {withCredentials:true});
       console.log(result);
       setStep(2);
     } catch (error) {
-      
+      console.log(error?.response?.data?.message || error.message);
     }
   }
   const handleVerifyOtp=async()=>{
     try {
-      const result=axios.post(`${serverUrl}/api/auth/verify-otp`,{email,otp},
+      const result= await axios.post(`${serverUrl}/api/auth/verify-otp`,{email,otp},
       {withCredentials:true});
       console.log(result);
       setStep(3);
     } catch (error) {
-      
+      console.log(error?.response?.data?.message || error.message);
     }
   }
   const handleResetPassword=async()=>{
     if(newPassword!=confirmPassword){
-      return alert("Passwords do not match");
+      return null;
     }
     try {
-      const result=axios.post(`${serverUrl}/api/auth/reset-otp`,{email,newPassword},
+      const result= await axios.post(`${serverUrl}/api/auth/reset-password`,{email,newPassword},
       {withCredentials:true});
       console.log(result);
      navigate("/signin");
     } catch (error) {
-      
+      console.log(error?.response?.data?.message || error.message);
     }
-
-  
   }
   return (
     <div

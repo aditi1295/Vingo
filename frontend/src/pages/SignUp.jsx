@@ -4,7 +4,7 @@ import { IoEyeOffSharp } from "react-icons/io5";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { serverUrl } from "../App.jsx";
+import { serverUrl } from "../App";
 
 function SignUp() {
   const primaryColor = "#ff4d2d";
@@ -21,7 +21,10 @@ function SignUp() {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
 
+  const [error, setError] = useState("");
+
   const handleSignUp = async () => {
+    setError("");
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/signup`,
@@ -30,6 +33,7 @@ function SignUp() {
       );
       console.log(result);
     } catch (err) {
+      setError(err?.response?.data?.message || "Something went wrong");
       console.log(err);
     }
   };
@@ -158,6 +162,10 @@ function SignUp() {
             ))}
           </div>
         </div>
+
+        {error && (
+          <p className="text-red-500 text-sm mb-3 text-center">{error}</p>
+        )}
 
         {/* Sign Up Button */}
         <button
