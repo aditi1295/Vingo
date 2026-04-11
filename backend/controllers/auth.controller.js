@@ -74,6 +74,7 @@ import { sendOtpEmail } from "../utils/mail.js";
         return res.status(500).json({ message: `sign out error ${error.message}` });
     }
 }
+// send otp controller
 
 export const sentOtp=async(req,res)=>{
     try {
@@ -97,7 +98,7 @@ export const sentOtp=async(req,res)=>{
 
 }
 
-
+// otp verification ka controller
 export const verifyOtp=async(req,res)=>{
     try{
    const {email,otp}=req.body;
@@ -116,6 +117,7 @@ export const verifyOtp=async(req,res)=>{
         return res.status(500).json({ message: `verify otp error ${err.message}` });
     }
 }
+//password reset krne ke liye ek controller likha hai 
 
 export const resetPassword=async(req,res)=>{
     try{
@@ -132,5 +134,29 @@ export const resetPassword=async(req,res)=>{
     }
     catch(err){
         return res.status(500).json({ message: `reset password error ${err.message}` });
+    }
+}
+// google se authentication create kr rhe h signup signin  ke liye 
+// agar user pehle se exist krta h to usko login krdo nhi to naya user create krdo aur usko login krdo
+
+export const googleAuth=async(req,res)=>{
+    try{
+      const {fullName,email,mobile,role}=req.body;
+      let user=await User.findOne({email});
+      if(!user){
+        user=await User.create({fullName,email,mobile,role,password:""});
+      }
+      const token = await genToken(user._id);
+      res.cookie("token", token, {
+          secure: false,
+          sameSite: "strict",
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+          httpOnly: true
+      });
+      return res.status(200).json({ message: "User logged in successfully", token });
+
+    }
+    catch(err){
+        return res.status(500).json({ message: `Google auth error ${err.message}` });
     }
 }
