@@ -5,6 +5,8 @@ import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "../App";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase";
 
 function SignUp() {
   const primaryColor = "#ff4d2d";
@@ -22,7 +24,9 @@ function SignUp() {
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState("");
-
+// signup krne ke liye handleSignUp function use kr rhe h jo ki axios ka use krke backend ke signup 
+// route ko call krta h aur user ka data waha bhejta h taki user register
+//  ho jaye aur usko token mile jisse wo login rhega
   const handleSignUp = async () => {
     setError("");
     try {
@@ -37,6 +41,17 @@ function SignUp() {
       console.log(err);
     }
   };
+  const handelGoogleAuth=async()=>{
+    if(!mobile){
+      return alert("Please enter your mobile number before signing up with Google");
+    }
+    const provider = new GoogleAuthProvider();
+    
+      const result = await signInWithPopup(auth, provider);
+      
+      console.log(result);
+    
+  }
 
   return (
     <div
@@ -177,7 +192,8 @@ function SignUp() {
         </button>
 
         {/* Google Button */}
-        <button className="w-full mt-4 font-semibold border border-gray-400 rounded-lg px-4 py-2 transition duration-200 hover:bg-gray-100 cursor-pointer flex items-center justify-center gap-2">
+        <button className="w-full mt-4 font-semibold border border-gray-400 rounded-lg px-4 py-2 transition duration-200 hover:bg-gray-100 cursor-pointer flex 
+        items-center justify-center gap-2" onClick={handelGoogleAuth}>
           <FcGoogle size={20} />
           Sign Up with Google
         </button>
