@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { serverUrl } from "../App";
+import { ClipLoader } from "react-spinners";
 
 function ForgotPassword() {
   const [step, setStep] = useState(1);
@@ -12,30 +13,51 @@ function ForgotPassword() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
-  
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  // seterroruse kiya hai taki jo button ke upper red me show ho jaye agra koi field khali chod di ho ya koi 
+// aur error aa jaye to wo user ko pata chal jaye ki
+//  kya problem hai, jaise ki email format sahi nahi hai ya password match nahi kar rahe hai, etc.
+
+// setloading use kiya hai taki jab user
+//  button pe click kare to button disable ho jaye aur 
+// uske jagah loading spinner show ho jaye taki user ko pata 
+// chal jaye ki kuch process ho raha hai aur wo wait kare, aur jab process complete ho jaye to
+//  loading spinner chala jaye aur button wapas enable ho jaye.
   
   const handleSendOtp=async()=>{
+    setLoading(true);
     try {
       const result= await axios.post(`${serverUrl}/api/auth/send-otp`,{email},
       {withCredentials:true});
       console.log(result);
+      setError("");
       setStep(2);
+      setLoading(false);
     } catch (error) {
-      console.log(error?.response?.data?.message || error.message);
+      setError(error?.response?.data?.message || error.message);
+      setLoading(false);
     }
   }
   const handleVerifyOtp=async()=>{
+    setLoading(true);
     try {
       const result= await axios.post(`${serverUrl}/api/auth/verify-otp`,{email,otp},
       {withCredentials:true});
       console.log(result);
+      setError("");
       setStep(3);
+      setLoading(false);
     } catch (error) {
-      console.log(error?.response?.data?.message || error.message);
+      setError(error?.response?.data?.message || error.message);
+      setLoading(false);
     }
   }
   const handleResetPassword=async()=>{
+    setLoading(true);
     if(newPassword!=confirmPassword){
+      setError("Passwords do not match");
+      setLoading(false);
       return null;
     }
     try {
@@ -43,8 +65,12 @@ function ForgotPassword() {
       {withCredentials:true});
       console.log(result);
      navigate("/signin");
+      setError("");
+      setLoading(false);
     } catch (error) {
-      console.log(error?.response?.data?.message || error.message);
+      setError(error?.response?.data?.message || error.message);
+      setLoading(false);
+      console.log(error);
     }
   }
   return (
@@ -72,19 +98,20 @@ function ForgotPassword() {
             placeholder="Enter your email"
             className="w-full px-3 py-2 rounded-lg border focus:outline-none border-gray-200"
             style={{ border: `1px solid #d1d5db` }}
-            value={email}
+            value={email} required
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
          {/* Sign Up Button */}
+            {error && (
+          <p className="text-red-500 text-sm mb-3 text-center">*{error}</p>
+        )}
         <button
           className="w-full font-semibold rounded-lg px-4 py-2 transition duration-200 
           hover:bg-[#e64323] cursor-pointer"
           style={{ backgroundColor: '#ff4d2d', color: "white" }}
-          onClick={handleSendOtp}
-          
-        >
-          Send OTP
+          onClick={handleSendOtp}  disabled={loading} >
+          {loading ? <ClipLoader size={20} color:white /> : "Send OTP"}
         </button>
         </div>
         }
@@ -99,18 +126,21 @@ function ForgotPassword() {
             placeholder="Enter the OTP sent to your email"
             className="w-full px-3 py-2 rounded-lg border focus:outline-none border-gray-200"
             style={{ border: `1px solid #d1d5db` }}
-            value={otp}
+            value={otp} required
             onChange={(e) => setOtp(e.target.value)}
           />
         </div>
+        {error && (
+          <p className="text-red-500 text-sm mb-3 text-center">*{error}</p>
+        )}
          {/* Sign Up Button */}
         <button
           className="w-full font-semibold rounded-lg px-4 py-2 transition duration-200 
           hover:bg-[#e64323] cursor-pointer"
           style={{ backgroundColor: '#ff4d2d', color: "white" }}
-          onClick={handleVerifyOtp}
-        >
-          Verify 
+          onClick={handleVerifyOtp}  disabled={loading} >
+          {loading ? <ClipLoader size={20} color:white /> : "Verify"}
+          
         </button>
         </div>}
         
@@ -125,7 +155,7 @@ function ForgotPassword() {
             placeholder="Enter New Password"
             className="w-full px-3 py-2 rounded-lg border focus:outline-none border-gray-200"
             style={{ border: `1px solid #d1d5db` }}
-            value={newPassword}
+            value={newPassword} required
             onChange={(e) => setNewPassword(e.target.value)}
           />
           <div className="mb-6 mt-4">
@@ -142,14 +172,18 @@ function ForgotPassword() {
           />
           </div>
         </div>
+        {error && (
+          <p className="text-red-500 text-sm mb-3 text-center">*{error}</p>
+        )}
          {/* Sign Up Button */}
         <button
           className="w-full font-semibold rounded-lg px-4 py-2 transition duration-200 
           hover:bg-[#e64323] cursor-pointer"
           style={{ backgroundColor: '#ff4d2d', color: "white" }}
-          onClick={handleResetPassword}
-        >
-          Reset Password
+          onClick={handleResetPassword}  disabled={loading} >
+          {loading ? <ClipLoader size={20} color='white' /> : "Reset Password"}
+        
+          
         </button>
         </div>}
       </div>
@@ -159,3 +193,4 @@ function ForgotPassword() {
 }
 
 export default ForgotPassword;
+

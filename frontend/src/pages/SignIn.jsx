@@ -5,6 +5,9 @@ import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "../App";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase";
+import {ClipLoader} from "react-spinners";
 
 function SignIn() {
   const primaryColor = "#ff4d2d";
@@ -16,8 +19,9 @@ function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const handleSignIn = async () => {
-    setError("");
+    setLoading(true);
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/signin`,
@@ -25,12 +29,39 @@ function SignIn() {
         { withCredentials: true }
       );
       console.log(result);
+      setError("");
+      setLoading(false);
     } catch (err) {
       setError(err?.response?.data?.message || "Something went wrong");
-      console.log(err);
+      setLoading(false);
     }
   };
 
+  // google se signup krne ke liye handleGoogleAuth function use kr rhe h
+  //  jo ki firebase ke GoogleAuthProvider ka use krke google se authentication 
+  // create krta h aur uske baad backend ke google-auth route ko call krta h jisme user ka data bhejta h taki user register ho 
+  // jaye ya login ho jaye
+    const handelGoogleAuth=async()=>{
+    
+    const provider = new GoogleAuthProvider();
+    
+      const result = await signInWithPopup(auth, provider);
+      
+     try {
+      const {data}= await axios.post(`${serverUrl}/api/auth/google-auth`,{
+        
+        email:result.user.email,
+       
+      },{withCredentials:true});
+      console.log(data);
+      setError("");
+      
+     } catch (error) {
+      setError(error?.response?.data?.message || "Something went wrong with Google Sign In");
+      
+     }
+    
+  }
   return (
     <div
       className="min-h-screen w-full flex items-center justify-center p-4"
@@ -63,7 +94,7 @@ function SignIn() {
             placeholder="Enter your email"
             className="w-full px-3 py-2 rounded-lg border focus:outline-none"
             style={{ border: `1px solid ${borderColor}` }}
-            value={email}
+            value={email} required
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
@@ -80,7 +111,7 @@ function SignIn() {
               placeholder="Enter your password"
               className="w-full px-3 py-2 pr-10 rounded-lg border focus:outline-none"
               style={{ border: `1px solid ${borderColor}` }}
-              value={password}
+              value={password} required
               onChange={(e) => setPassword(e.target.value)}
             />
 
@@ -99,20 +130,21 @@ function SignIn() {
             Forgot Password
         </div>
         {error && (
-          <p className="text-red-500 text-sm mb-3 text-center">{error}</p>
+          <p className="text-red-500 text-sm mb-3 text-center">*{error}</p>
         )}
 
         {/* Sign Up Button */}
         <button
           className="w-full font-semibold rounded-lg px-4 py-2 transition duration-200 cursor-pointer"
           style={{ backgroundColor: primaryColor, color: "white" }}
-          onClick={handleSignIn}
-        >
-          Sign In
+          onClick={handleSignIn}  disabled={loading}>
+          {loading ? <ClipLoader size={20} color='white' /> : "Sign In"}
         </button>
 
         {/* Google Button */}
-        <button className="w-full mt-4 font-semibold border border-gray-400 rounded-lg px-4 py-2 transition duration-200 hover:bg-gray-100 cursor-pointer flex items-center justify-center gap-2">
+        <button className="w-full mt-4 font-semibold border border-gray-400 rounded-lg px-4 py-2
+         transition duration-200 hover:bg-gray-100 cursor-pointer flex items-center
+          justify-center gap-2" onClick={handelGoogleAuth}>
           <FcGoogle size={20} />
           Sign In with Google
         </button>
