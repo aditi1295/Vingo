@@ -144,7 +144,7 @@ export const googleAuth=async(req,res)=>{
       const {fullName,email,mobile,role}=req.body;
       let user=await User.findOne({email});
       if(!user){
-        user=await User.create({fullName,email,mobile,role,password:""});
+        user=await User.create({fullName,email,mobile,role});
       }
       const token = await genToken(user._id);
       res.cookie("token", token, {
@@ -153,7 +153,7 @@ export const googleAuth=async(req,res)=>{
           maxAge: 7 * 24 * 60 * 60 * 1000,
           httpOnly: true
       });
-      return res.status(200).json({ message: "User logged in successfully", token });
+      return res.status(200).json(user);
 
     }
     catch(err){
