@@ -8,12 +8,14 @@ import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
 import {ClipLoader} from "react-spinners";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../../redux/userSlice.js";
 
 function SignIn() {
   const primaryColor = "#ff4d2d";
   const bgColor = "#fff9f6";
   const borderColor = "#ddd";
-
+  const dispatch=useDispatch( );
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -28,7 +30,7 @@ function SignIn() {
         { email, password },
         { withCredentials: true }
       );
-      console.log(result);
+      dispatch(setUserData(result.data));
       setError("");
       setLoading(false);
     } catch (err) {
@@ -53,8 +55,8 @@ function SignIn() {
         email:result.user.email,
        
       },{withCredentials:true});
-      console.log(data);
-      setError("");
+      dispatch(setUserData(data));
+      
       
      } catch (error) {
       setError(error?.response?.data?.message || "Something went wrong with Google Sign In");

@@ -5,6 +5,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { serverUrl } from "../App";
 import { ClipLoader } from "react-spinners";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../../redux/userSlice.js";
 
 function ForgotPassword() {
   const [step, setStep] = useState(1);
@@ -15,6 +17,8 @@ function ForgotPassword() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const dispatch=useDispatch( );
+  
   // seterroruse kiya hai taki jo button ke upper red me show ho jaye agra koi field khali chod di ho ya koi 
 // aur error aa jaye to wo user ko pata chal jaye ki
 //  kya problem hai, jaise ki email format sahi nahi hai ya password match nahi kar rahe hai, etc.
@@ -30,7 +34,7 @@ function ForgotPassword() {
     try {
       const result= await axios.post(`${serverUrl}/api/auth/send-otp`,{email},
       {withCredentials:true});
-      console.log(result);
+      dispatch(setUserData(result.data));
       setError("");
       setStep(2);
       setLoading(false);
@@ -44,7 +48,7 @@ function ForgotPassword() {
     try {
       const result= await axios.post(`${serverUrl}/api/auth/verify-otp`,{email,otp},
       {withCredentials:true});
-      console.log(result);
+      dispatch(setUserData(result.data));
       setError("");
       setStep(3);
       setLoading(false);
@@ -63,7 +67,7 @@ function ForgotPassword() {
     try {
       const result= await axios.post(`${serverUrl}/api/auth/reset-password`,{email,newPassword},
       {withCredentials:true});
-      console.log(result);
+      dispatch(setUserData(result.data));
      navigate("/signin");
       setError("");
       setLoading(false);
