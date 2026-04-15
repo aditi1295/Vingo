@@ -59,7 +59,7 @@ function SignIn() {
 
 
     } catch (error) {
-      setError(error?.response?.data?.message || "Something went wrong with Google Sign In");
+      console.log(error);
 
     }
 

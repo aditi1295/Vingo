@@ -4,8 +4,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const userSlice = createSlice({
     name: "user",
     initialState: {
-        userData: null
-
+        userData: null,
+        city: null,
+        authLoading: true,
     },
     //reducers isliye bante h taki pata
     //  chale hum kis type ka action dispatch 
@@ -13,11 +14,16 @@ const userSlice = createSlice({
     reducers: {
         setUserData: (state, action) => {
             state.userData = action.payload;
-        }
-
+        },
+        setCity: (state, action) => {
+            state.city = action.payload;
+        },
+        setAuthLoading: (state, action) => {
+            state.authLoading = action.payload;
+        },
     }
 
 
 })
-export const { setUserData } = userSlice.actions;
+export const { setUserData, setCity, setAuthLoading } = userSlice.actions;
 export default userSlice.reducer;
