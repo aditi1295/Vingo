@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { serverUrl } from "../App";
 import { ClipLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
-import { setUserData } from "../../redux/userSlice.js";
+import { setUserData } from "../redux/userSlice.js";
 
 function ForgotPassword() {
   const [step, setStep] = useState(1);
@@ -197,4 +197,3 @@ function ForgotPassword() {
 }
 
 export default ForgotPassword;
-

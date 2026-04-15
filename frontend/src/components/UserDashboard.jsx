@@ -1,7 +1,11 @@
 import React from 'react';
+import Nav from './Nav';
+
 function UserDashboard() {
     return ( 
-        <div></div>
+        <div>
+            <Nav/>
+        </div>
      );
 }
 

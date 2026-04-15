@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import axios from "axios";
-import { serverUrl } from "../src/App.jsx";
+import { serverUrl } from "../App.jsx";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../redux/userSlice.js";;
 
@@ -22,7 +22,7 @@ function useGetCurrentUser() {
     };
 
     fetchUser();
-  }, [dispatch]);
+  }, []);
 
 }
 

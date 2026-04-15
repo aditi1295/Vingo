@@ -7,9 +7,9 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
-import {ClipLoader} from "react-spinners";
+import { ClipLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
-import { setUserData } from "../../redux/userSlice.js";
+import { setUserData } from "../redux/userSlice.js";
 
 
 function SignUp() {
@@ -26,13 +26,13 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch=useDispatch( );
+  const dispatch = useDispatch();
 
-const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-// signup krne ke liye handleSignUp function use kr rhe h jo ki axios ka use krke backend ke signup 
-// route ko call krta h aur user ka data waha bhejta h taki user register
-//  ho jaye aur usko token mile jisse wo login rhega
+  // signup krne ke liye handleSignUp function use kr rhe h jo ki axios ka use krke backend ke signup 
+  // route ko call krta h aur user ka data waha bhejta h taki user register
+  //  ho jaye aur usko token mile jisse wo login rhega
   const handleSignUp = async () => {
     setLoading(true);
     try {
@@ -54,28 +54,28 @@ const [loading, setLoading] = useState(false);
   //  jo ki firebase ke GoogleAuthProvider ka use krke google se authentication 
   // create krta h aur uske baad backend ke google-auth route ko call krta h jisme user ka data bhejta h taki user register ho 
   // jaye ya login ho jaye
-  const handelGoogleAuth=async()=>{
-    if(!mobile){
+  const handelGoogleAuth = async () => {
+    if (!mobile) {
       return setError("Mobile number is required to sign up with Google");
     }
     const provider = new GoogleAuthProvider();
-    
-      const result = await signInWithPopup(auth, provider);
-      
-     try {
-      const {data}= await axios.post(`${serverUrl}/api/auth/google-auth`,{
-        fullName:result.user.displayName,
-        email:result.user.email,
+
+    const result = await signInWithPopup(auth, provider);
+
+    try {
+      const { data } = await axios.post(`${serverUrl}/api/auth/google-auth`, {
+        fullName: result.user.displayName,
+        email: result.user.email,
         role,
         mobile
-      },{withCredentials:true});
+      }, { withCredentials: true });
       dispatch(setUserData(data));
-      
-     } catch (error) {
+
+    } catch (error) {
       console.log(error);
-      
-     }
-    
+
+    }
+
   }
 
   return (
@@ -186,15 +186,15 @@ const [loading, setLoading] = useState(false);
                 style={
                   role === r
                     ? {
-                        backgroundColor: primaryColor,
-                        color: "white",
-                        border: `1px solid ${primaryColor}`,
-                      }
+                      backgroundColor: primaryColor,
+                      color: "white",
+                      border: `1px solid ${primaryColor}`,
+                    }
                     : {
-                        border: `1px solid ${borderColor}`,
-                        backgroundColor: "transparent",
-                        color: "#333",
-                      }
+                      border: `1px solid ${borderColor}`,
+                      backgroundColor: "transparent",
+                      color: "#333",
+                    }
                 }
               >
                 {r}
@@ -214,7 +214,7 @@ const [loading, setLoading] = useState(false);
           onClick={handleSignUp} disabled={loading}>
           {loading ? <ClipLoader size={20} color='white' /> : "Sign Up"}
         </button>
-        
+
 
         {/* Google Button */}
         <button className="w-full mt-4 font-semibold border border-gray-400 rounded-lg px-4 py-2 transition duration-200 hover:bg-gray-100 cursor-pointer flex 

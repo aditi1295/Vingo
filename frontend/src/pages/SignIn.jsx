@@ -7,15 +7,15 @@ import axios from "axios";
 import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
-import {ClipLoader} from "react-spinners";
+import { ClipLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
-import { setUserData } from "../../redux/userSlice.js";
+import { setUserData } from "../redux/userSlice.js";
 
 function SignIn() {
   const primaryColor = "#ff4d2d";
   const bgColor = "#fff9f6";
   const borderColor = "#ddd";
-  const dispatch=useDispatch( );
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -43,26 +43,26 @@ function SignIn() {
   //  jo ki firebase ke GoogleAuthProvider ka use krke google se authentication 
   // create krta h aur uske baad backend ke google-auth route ko call krta h jisme user ka data bhejta h taki user register ho 
   // jaye ya login ho jaye
-    const handelGoogleAuth=async()=>{
-    
+  const handelGoogleAuth = async () => {
+
     const provider = new GoogleAuthProvider();
-    
-      const result = await signInWithPopup(auth, provider);
-      
-     try {
-      const {data}= await axios.post(`${serverUrl}/api/auth/google-auth`,{
-        
-        email:result.user.email,
-       
-      },{withCredentials:true});
+
+    const result = await signInWithPopup(auth, provider);
+
+    try {
+      const { data } = await axios.post(`${serverUrl}/api/auth/google-auth`, {
+
+        email: result.user.email,
+
+      }, { withCredentials: true });
       dispatch(setUserData(data));
-      
-      
-     } catch (error) {
+
+
+    } catch (error) {
       setError(error?.response?.data?.message || "Something went wrong with Google Sign In");
-      
-     }
-    
+
+    }
+
   }
   return (
     <div
@@ -84,7 +84,7 @@ function SignIn() {
           Sign In to  your account to get started with delicious food deliveries
         </p>
 
-       
+
 
         {/* Email */}
         <div className="mb-4">
@@ -126,10 +126,10 @@ function SignIn() {
             </button>
           </div>
         </div>
-        <div className='text-right mb-4  text-[#ff4d2d] font-medium cursor-pointer' onClick={()=>
-            navigate("/forgotPassword")
+        <div className='text-right mb-4  text-[#ff4d2d] font-medium cursor-pointer' onClick={() =>
+          navigate("/forgotPassword")
         }>
-            Forgot Password
+          Forgot Password
         </div>
         {error && (
           <p className="text-red-500 text-sm mb-3 text-center">*{error}</p>
@@ -139,7 +139,7 @@ function SignIn() {
         <button
           className="w-full font-semibold rounded-lg px-4 py-2 transition duration-200 cursor-pointer"
           style={{ backgroundColor: primaryColor, color: "white" }}
-          onClick={handleSignIn}  disabled={loading}>
+          onClick={handleSignIn} disabled={loading}>
           {loading ? <ClipLoader size={20} color='white' /> : "Sign In"}
         </button>
 
