@@ -39,4 +39,4 @@ const Shop=mongoose.model('Shop',shopSchema);
 export default Shop;
 //multer and clauudinary ka use krna hai image ke liye
 //image multer middleware ke through public folder me dalnege
-//  ir claudinary par upload karenge aur uska url database me store karenge
+//  or claudinary par upload karenge aur uska url database me store karenge
