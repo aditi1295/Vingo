@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import SignUp from './pages/SignUp'
 import SignIn from './pages/SignIn'
@@ -8,11 +8,13 @@ import { useSelector } from 'react-redux'
 export const serverUrl = "http://localhost:8000";
 import Home from './pages/Home'
 import useGetCity from './hooks/useGetCity'
+import useGetMyShop from './hooks/useGetMyShop.jsx'
 
 
 function App() {
   useGetCurrentUser();
   useGetCity();
+  useGetMyShop();
   const { userData } = useSelector(state => state.user);
 
   return (
