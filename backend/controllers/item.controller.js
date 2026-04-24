@@ -1,6 +1,7 @@
 //item ko add and edit karne ke liye controller
 import Shop from "../models/ShopModel.js";
-import { uploadOnCloudinary } from "../utils/imageUploader.js";
+import Item from "../models/ItemModel.js";
+import uploadOnCloudinary from "../utils/cloudinary.js";
 
 
 export const addItem=async(req,res)=>{

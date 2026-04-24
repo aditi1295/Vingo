@@ -10,7 +10,7 @@ const shopSchema=new mongoose.Schema({
         required:true
     },
     owner:{
-        type:mongoose.Schema.types.ObjectId,
+        type:mongoose.Schema.Types.ObjectId,
         ref:'User',
         required:true
     },
@@ -32,7 +32,7 @@ const shopSchema=new mongoose.Schema({
     }]
 
 
-},{timestamp:true})
+},{timestamps:true})
 
 const Shop=mongoose.model('Shop',shopSchema);
 

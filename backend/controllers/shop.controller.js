@@ -1,4 +1,4 @@
-import { uploadOnCloudinary } from "../utils/imageUploader.js";
+import uploadOnCloudinary from "../utils/cloudinary.js";
 import Shop from "../models/ShopModel.js";
 
 //shop agar h to update krna hai nhi to create krna hai
@@ -37,5 +37,17 @@ export  const createEditShop = async(req,res)=>{
     } catch (error) {
         return res.status(500).json({message:`create shop error ${error.message}`})
     
+    }
+}
+export const getMyShop=async(req,res)=>{
+    try {
+        const shop=await Shop.findOne({owner:req.user._id}).populate('owner items');
+        if(!shop){
+            return res.status(404).json({ message: "Shop not found" });
+        }
+        return res.status(200).json(shop);
+    } catch (error) {
+        return res.status(500).json({message:`get  my shop error ${error.message}`})
+        
     }
 }
