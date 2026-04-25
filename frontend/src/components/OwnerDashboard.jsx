@@ -2,9 +2,11 @@ import React from 'react';
 import Nav from './Nav.jsx'
 import { useSelector } from 'react-redux';
 import { FaUtensils } from "react-icons/fa6";
+import { useNavigate } from 'react-router-dom';
 
 function OwnerDashboard() {
   const {myShopData} = useSelector((state) => state.owner);
+  const navigate = useNavigate();
     return ( 
         <div className='w-full min-h-screen bg-[#fff9f6] flex flex-col items-center'>
           <Nav/>
@@ -19,9 +21,9 @@ function OwnerDashboard() {
               <p className='text-gray-600 mb-4 test-sm sm:text-base'>Join our food dilivery
                  platform and reach thousands of hungery customers every day.</p>
                  <button className='bg-[#ff4d2d] text-white px-5 sm:px-6 py-2 rounded-full
-                 font-medium shadow-md hover:bg-orange-600 transition-colors duration-200'>
+                 font-medium shadow-md hover:bg-orange-600 transition-colors duration-200' 
+                 onClick={()=>navigate("/create-edit-shop")}>
                   Get Started</button>
-
                 </div>
             </div>
           </div>}

@@ -6,7 +6,9 @@ const userSlice = createSlice({
     initialState: {
         userData: null,
         city: null,
-        authLoading: true,
+        state: null,
+        isAuthLoading: true, // ye tab tak true rahega jab tak user ka data load nahi ho jata
+        
     },
     //reducers isliye bante h taki pata
     //  chale hum kis type ka action dispatch 
@@ -18,12 +20,15 @@ const userSlice = createSlice({
         setCity: (state, action) => {
             state.city = action.payload;
         },
-        setAuthLoading: (state, action) => {
-            state.authLoading = action.payload;
+        setState: (state, action) => {
+            state.state = action.payload;
         },
+        setAuthLoading: (state, action) => {
+            state.isAuthLoading = action.payload;
+        }
     }
 
 
 })
-export const { setUserData, setCity, setAuthLoading } = userSlice.actions;
+export const { setUserData, setCity, setState, setAuthLoading } = userSlice.actions;
 export default userSlice.reducer;
