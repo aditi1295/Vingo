@@ -19,7 +19,7 @@ import { sendOtpEmail } from "../utils/mail.js";
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = await User.create({
+        const newuser = await User.create({
             fullName,
             email,
             password: hashedPassword,
@@ -27,7 +27,7 @@ import { sendOtpEmail } from "../utils/mail.js";
             role
         });
 
-        const token = await genToken(newUser._id);
+        const token = await genToken(newuser._id);
         res.cookie("token", token, {
             secure: false,
             sameSite: "strict",
@@ -45,7 +45,7 @@ import { sendOtpEmail } from "../utils/mail.js";
  export const signIn = async (req, res) => {
     try {
         const { email, password } = req.body;
-        let user = await User.findOne({ email });
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: "User not found" });
         }

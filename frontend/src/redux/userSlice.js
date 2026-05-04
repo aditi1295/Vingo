@@ -1,13 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice,current } from "@reduxjs/toolkit";
 
 // ye user ka sara data store karegi
 const userSlice = createSlice({
     name: "user",
     initialState: {
         userData: null,
-        city: null,
-        state: null,
-        isAuthLoading: true, // ye tab tak true rahega jab tak user ka data load nahi ho jata
+        currentCity: "",
+        currentState: "",
+        currentAddress:"",
+         // ye tab tak true rahega jab tak user ka data load nahi ho jata
         
     },
     //reducers isliye bante h taki pata
@@ -17,18 +18,18 @@ const userSlice = createSlice({
         setUserData: (state, action) => {
             state.userData = action.payload;
         },
-        setCity: (state, action) => {
-            state.city = action.payload;
+         setCurrentCity: (state, action) => {
+            state.currentCity = action.payload;
         },
-        setState: (state, action) => {
-            state.state = action.payload;
+        setCurrentState: (state, action) => {
+            state.currentState = action.payload;
         },
-        setAuthLoading: (state, action) => {
-            state.isAuthLoading = action.payload;
-        }
+       
+    setCurrentAddress:(state,action)=>{
+        state.currentAddress=action.payload;   
     }
 
 
-})
-export const { setUserData, setCity, setState, setAuthLoading } = userSlice.actions;
+}});
+export const { setUserData, setCurrentCity, setCurrentState, setCurrentAddress } = userSlice.actions;
 export default userSlice.reducer;

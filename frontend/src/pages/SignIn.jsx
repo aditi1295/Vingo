@@ -20,7 +20,7 @@ function SignIn() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [err, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const handleSignIn = async () => {
     setLoading(true);
@@ -33,21 +33,21 @@ function SignIn() {
       dispatch(setUserData(result.data));
       setError("");
       setLoading(false);
-    } catch (err) {
-      setError(err?.response?.data?.message || "Something went wrong");
+    } catch (error) {
+      setError(error?.response?.data?.message || "Something went wrong");
       setLoading(false);
     }
-  };
+  };  
 
   // google se signup krne ke liye handleGoogleAuth function use kr rhe h
   //  jo ki firebase ke GoogleAuthProvider ka use krke google se authentication 
   // create krta h aur uske baad backend ke google-auth route ko call krta h jisme user ka data bhejta h taki user register ho 
   // jaye ya login ho jaye
-  const handelGoogleAuth = async () => {
+  const handleGoogleAuth = async () => {
 
     const provider = new GoogleAuthProvider();
 
-    const result = await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth,provider);
 
     try {
       const { data } = await axios.post(`${serverUrl}/api/auth/google-auth`, {
@@ -74,7 +74,7 @@ function SignIn() {
         style={{ border: `1px solid ${borderColor}` }}
       >
         <h1
-          className="text-3xl font-bold mb-2"
+          className={"text-3xl font-bold mb-2"}
           style={{ color: primaryColor }}
         >
           Vingo
@@ -88,7 +88,7 @@ function SignIn() {
 
         {/* Email */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-1">
+          <label   htmlFor="email" className="block text-gray-700 font-medium mb-1">
             Email
           </label>
           <input
@@ -102,13 +102,13 @@ function SignIn() {
         </div>
         {/* Password */}
         <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-1">
+          <label  htmlFor="password" className="block text-gray-700 font-medium mb-1">
             Password
           </label>
 
           <div className="relative">
             <input
-              type={showPassword ? "text" : "password"}
+              type={`${showPassword ? "text" : "password"}`}
               name="password"
               placeholder="Enter your password"
               className="w-full px-3 py-2 pr-10 rounded-lg border focus:outline-none"
@@ -120,7 +120,7 @@ function SignIn() {
             <button
               type="button"
               className="absolute right-3 top-3 text-gray-500"
-              onClick={() => setShowPassword((prev) => !prev)}
+              onClick={() => setShowPassword(prev => !prev)}
             >
               {!showPassword ? <IoMdEye /> : <IoEyeOffSharp />}
             </button>
@@ -131,9 +131,9 @@ function SignIn() {
         }>
           Forgot Password
         </div>
-        {error && (
+        {/* {error && (
           <p className="text-red-500 text-sm mb-3 text-center">*{error}</p>
-        )}
+        )} */}
 
         {/* Sign Up Button */}
         <button
@@ -146,7 +146,7 @@ function SignIn() {
         {/* Google Button */}
         <button className="w-full mt-4 font-semibold border border-gray-400 rounded-lg px-4 py-2
          transition duration-200 hover:bg-gray-100 cursor-pointer flex items-center
-          justify-center gap-2" onClick={handelGoogleAuth}>
+          justify-center gap-2" onClick={handleGoogleAuth}>
           <FcGoogle size={20} />
           Sign In with Google
         </button>
@@ -156,7 +156,8 @@ function SignIn() {
           className="text-center mt-6 cursor-pointer"
           onClick={() => navigate("/signup")}
         >
-          Want to create an account?{" "}
+          Want to create an account 
+           ?
           <span className="text-[#ff4d4d]">Sign Up</span>
         </p>
       </div>

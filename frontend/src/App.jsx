@@ -10,13 +10,17 @@ import Home from './pages/Home'
 import useGetCity from './hooks/useGetCity'
 import useGetMyShop from './hooks/useGetMyShop.jsx'
 import CreateEditShop from './pages/CreateEditShop.jsx'
+import { useDispatch } from 'react-redux'
 
 
 function App() {
+   const { userData } = useSelector(state => state.user);
+  const dispatch = useDispatch();
+   
   useGetCurrentUser();
   useGetCity();
   useGetMyShop();
-  const { userData } = useSelector(state => state.user);
+
 
   return (
     <Routes>

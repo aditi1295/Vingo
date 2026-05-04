@@ -8,23 +8,23 @@ export const addItem=async(req,res)=>{
     try {
         const {name,category,foodType,price}=req.body;
         
-        let img;
+        let image;
         if(req.file){
-            img=await uploadOnCloudinary(req.file.path);
+            image=await uploadOnCloudinary(req.file.path);
 
         }
-        const shop=await Shop.findOne({owner:req.user._id});
+        const shop=await Shop.findOne({owner:req.userId});
         if(!shop){
             return res.status(404).json({
-                success:false,  message:"Shop not found"
+                 message:"Shop not found"
             });
         }
-        const item=await shop.items.create({
+        const item=await Item.create({
             name,
             category,
             foodType,
             price,
-            img,
+            image,
             shop:shop._id
         });
         res.status(201).json({
@@ -41,14 +41,15 @@ export const addItem=async(req,res)=>{
 
 export const editItem=async(req,res)=>{
     try {
+        const {itemId}=req.params.itemID;
         const {name,category,foodType,price}=req.body;
-        const {itemId}=req.params;
-        let img;
+        
+        let image;
         if(req.file){
-            img=await uploadOnCloudinary(req.file.path);
+            image=await uploadOnCloudinary(req.file.path);
         }
         const item=await Item.findByIdAndUpdate(itemId, { name, category,
-             foodType, price, img },
+             foodType, price, image },
              { new: true });
         if (!item) {
             return res.status(404).json({message:"Item not found" });
