@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import React, { useEffect } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -8,10 +8,17 @@ import { FaUtensils } from "react-icons/fa6";
 function CreateEditShop() {
   const navigate = useNavigate();
   const { myShopData } = useSelector((state) => state.owner);
-  const [name,Setname]=useState(myShopData ? myShopData.name : "");
-  const [address,Setaddress]=useState(myShopData ? myShopData.address : "");
-  const [city,Setcity]=useState(myShopData ? myShopData.city : "");
-  const [state,Setstate]=useState(myShopData ? myShopData.state : "");
+  const { city: userCity, state: userState } = useSelector((state) => state.user);
+  const [name, Setname] = useState(myShopData ? myShopData.name : "");
+  const [address, Setaddress] = useState(myShopData ? myShopData.address : "");
+  const [city, Setcity] = useState(myShopData ? myShopData.city : (userCity || ""));
+  const [state, Setstate] = useState(myShopData ? myShopData.state : (userState || ""));
+
+  useEffect(() => {
+    if (myShopData) return;
+    if (userCity && !city) Setcity(userCity);
+    if (userState && !state) Setstate(userState);
+  }, [userCity, userState, myShopData]);
   return (
     <div
       className="flex justify-center flex-col items-center p-6 bg-gradiant-to-br
@@ -37,7 +44,8 @@ function CreateEditShop() {
                 <label className="block text-gray-700 font-medium mb-1 text-sm"> Shop Name
                 </label>
                 <input type="text" placeholder="Enter your shop name" className="w-full border rounded-lg px-4 py-2 focus:outline-none
-                 focus:ring-2 focus:ring-orange-500"/>
+                 focus:ring-2 focus:ring-orange-500"
+                 value={name} onChange={(e) => Setname(e.target.value)}/>
             </div>
         <div>
                 <label className="block text-gray-700 font-medium mb-1 text-sm"> Shop Image
@@ -50,18 +58,21 @@ function CreateEditShop() {
                 <label className="block text-gray-700 font-medium mb-1 text-sm"> City
                 </label>
                 <input type="text" placeholder=" City" className="w-full border rounded-lg px-4 py-2 focus:outline-none
-                 focus:ring-2 focus:ring-orange-500"/>
+                 focus:ring-2 focus:ring-orange-500"
+                 value={city} onChange={(e) => Setcity(e.target.value)}/>
                 </div>
                 <div><label className="block text-gray-700 font-medium mb-1 text-sm"> State
                 </label>
                 <input type="text" placeholder=" State" className="w-full border rounded-lg px-4 py-2 focus:outline-none
-                 focus:ring-2 focus:ring-orange-500"/></div>
+                 focus:ring-2 focus:ring-orange-500"
+                 value={state} onChange={(e) => Setstate(e.target.value)}/></div>
             </div>
              <div >
                 <label className="block text-gray-700 font-medium mb-1 text-sm"> Shop Address
                 </label>
                 <input type="text" placeholder="Enter Shop Address" className="w-full border rounded-lg px-4 py-2 focus:outline-none
-                 focus:ring-2 focus:ring-orange-500"/>
+                 focus:ring-2 focus:ring-orange-500"
+                 value={address} onChange={(e) => Setaddress(e.target.value)}/>
             </div>
             <button className="w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg
             font-semibold shadow-md hover:bg-orange-600 hover:shadow-lg transition-all

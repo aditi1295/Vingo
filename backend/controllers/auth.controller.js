@@ -35,7 +35,8 @@ import { sendOtpEmail } from "../utils/mail.js";
             httpOnly: true
         });
 
-        return res.status(201).json({ message: "User registered successfully", token });
+        const userResponse = await User.findById(newUser._id).select("-password");
+        return res.status(201).json(userResponse);
 
     } catch (error) {
         return res.status(500).json({ message: `sign up error ${error.message}` });
@@ -49,6 +50,9 @@ import { sendOtpEmail } from "../utils/mail.js";
         if (!user) {
             return res.status(400).json({ message: "User not found" });
         }
+        if (!user.password) {
+            return res.status(400).json({ message: "Please sign in with Google" });
+        }
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid credentials" });
@@ -60,7 +64,8 @@ import { sendOtpEmail } from "../utils/mail.js";
             maxAge: 7 * 24 * 60 * 60 * 1000,
             httpOnly: true
         });
-        return res.status(200).json({ message: "User logged in successfully", token });
+        const userResponse = await User.findById(user._id).select("-password");
+        return res.status(200).json(userResponse);
     } catch (error) {
         return res.status(500).json({ message: `sign in error ${error.message}` });
     }
@@ -144,6 +149,9 @@ export const googleAuth=async(req,res)=>{
       const {fullName,email,mobile,role}=req.body;
       let user=await User.findOne({email});
       if(!user){
+        if(!fullName || !mobile || !role){
+            return res.status(400).json({ message: "Please sign up with Google first" });
+        }
         user=await User.create({fullName,email,mobile,role});
       }
       const token = await genToken(user._id);
@@ -153,7 +161,8 @@ export const googleAuth=async(req,res)=>{
           maxAge: 7 * 24 * 60 * 60 * 1000,
           httpOnly: true
       });
-      return res.status(200).json(user);
+      const userResponse = await User.findById(user._id).select("-password");
+      return res.status(200).json(userResponse);
 
     }
     catch(err){
