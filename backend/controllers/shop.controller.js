@@ -11,8 +11,10 @@ export  const createEditShop = async(req,res)=>{
             console.log(req.file);
             image=await uploadOnCloudinary(req.file.path)
         }
-        let shop=await Shop.findOne({owner:req.userId});
+        let shop=await Shop.findOne({owner:req.userId})
+        
         if(!shop){
+            
            shop=await Shop.create({
             name,
             city,
@@ -33,7 +35,7 @@ export  const createEditShop = async(req,res)=>{
             owner:req.userId,
         },{new:true})
         }
-      await shop.populate('owner');
+      await shop.populate('owner items');
         res.status(201).json(shop)
     } catch (error) {
         return res.status(500).json({message:`create shop error ${error.message}`})
@@ -42,9 +44,9 @@ export  const createEditShop = async(req,res)=>{
 }
 export const getMyShop=async(req,res)=>{
     try {
-        const shop=await Shop.findOne({owner:req.userId}).populate('owner items');
+        const shop=await Shop.findOne({owner:req.userId}).populate('owner');
         if(!shop){
-            return null;
+              return null;
         }
         return res.status(200).json(shop);
     } catch (error) {

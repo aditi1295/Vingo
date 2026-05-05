@@ -27,10 +27,11 @@ export const addItem=async(req,res)=>{
             image,
             shop:shop._id
         });
-        res.status(201).json({
-            
-            item
-        });
+        shop.items.push(item._id);
+        await shop.save();
+        await shop.populate('items owner');
+       
+        res.status(201).json(shop);
     } catch (error) {
         res.status(500).json({
            
@@ -41,7 +42,7 @@ export const addItem=async(req,res)=>{
 
 export const editItem=async(req,res)=>{
     try {
-        const {itemId}=req.params.itemID;
+        const {itemId}=req.params.itemId;
         const {name,category,foodType,price}=req.body;
         
         let image;
@@ -54,7 +55,7 @@ export const editItem=async(req,res)=>{
         if (!item) {
             return res.status(404).json({message:"Item not found" });
         }
-        res.status(200).json({item });
+        res.status(200).json(shop);
     } catch (error) {
         res.status(500).json({
             
