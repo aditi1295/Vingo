@@ -55,11 +55,29 @@ export const editItem=async(req,res)=>{
         if (!item) {
             return res.status(404).json({message:"Item not found" });
         }
-        res.status(200).json(shop);
+        res.status(200).json(item);
     } catch (error) {
         res.status(500).json({
             
             message:`Edit Item Error ${error.message}`
+        });
+    }
+}
+
+export const getItemById=async(req,res)=>{
+    try {
+
+        const { itemId } = req.params.itemId;
+        const item=await Item.findById(itemId);
+        if(!item){
+            return res.status(404).json({
+                message:"Item not found"
+            });
+        }
+        res.status(200).json(item);
+    } catch (error) {
+        res.status(500).json({
+            message:`Get Item Error ${error.message}`
         });
     }
 }
