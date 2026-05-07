@@ -12,6 +12,7 @@ import useGetCity from './hooks/useGetCity'
 import useGetMyShop from './hooks/useGetMyShop.jsx'
 import CreateEditShop from './pages/CreateEditShop.jsx'
 import { useDispatch } from 'react-redux'
+import EditItem from './pages/EditItem.jsx'
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
       <Route path='/' element={userData ? <Home /> : <Navigate to={"/signin"} />} />
       <Route path='/create-edit-shop' element={userData ? <CreateEditShop /> : <Navigate to={"/signin"} />} />
       <Route path='/add-item' element={userData ? <AddItem /> : <Navigate to={"/signin"} />} />
+      <Route path='/edit-item/:itemId' element={userData ? <EditItem /> : <Navigate to={"/signin"} />} />
     </Routes>
   );
 }
