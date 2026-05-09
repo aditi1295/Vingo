@@ -20,6 +20,7 @@ function CreateEditShop() {
   const [state,Setstate]=useState(myShopData?.state || currentState);
   const [frontendImage,setfrontendImage]=useState(myShopData?.image || null);
   const [backendImage,setbackendImage]=useState(null);
+  const [loading,setLoading]=useState(false);
   const handelImage=(e)=>{
     const file=e.target.files[0];
     setbackendImage(file);
@@ -28,6 +29,7 @@ function CreateEditShop() {
   }
   const handelSubmit=async(e)=>{
     e.preventDefault();
+    setLoading(true);
     try{
       const formData=new FormData()
       formData.append("name",name)
@@ -40,10 +42,13 @@ function CreateEditShop() {
       const result=await axios.post(`${serverUrl}/api/shop/create-edit-shop`,formData,
         {withCredentials:true})
         dispatch(setMyShopData(result.data))
-        console.log(result.data);
+        setLoading(false);
+        navigate("/")
+        
     }
     catch(error){
       console.log(error)
+      setLoading(false);
     }
   }
   return (
@@ -105,8 +110,9 @@ function CreateEditShop() {
             </div>
             <button className="w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg
             font-semibold shadow-md hover:bg-orange-600 hover:shadow-lg transition-all
-            duration-200 cursor-pointer">
-                Save
+            duration-200 cursor-pointer" disabled={loading}>
+              {loading? <ClipLoader size={20} color='white'/>:"Save"}
+                
             </button>
             </form>
       </div>
@@ -114,3 +120,4 @@ function CreateEditShop() {
   );
 }
 export default CreateEditShop;
+ 

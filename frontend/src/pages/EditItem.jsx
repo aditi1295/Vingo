@@ -6,24 +6,24 @@ import { useState } from "react";
 import { FaUtensils } from "react-icons/fa6";
 import { serverUrl } from "../App";
 import { setMyShopData } from "../redux/ownerSlice";
-import { ClimbingBoxLoader } from "react-spinners";
+import { ClimbingBoxLoader, ClipLoader } from "react-spinners";
 import axios from "axios";
 import { useEffect } from "react";
-import { use } from "react";
+
 
 function EditItem() {
   const navigate = useNavigate();
   const dispatch=useDispatch()
    const [currentItem,setcurrentItem]=useState(null);
   const { myShopData } = useSelector((state) => state.owner);
- const {itemId} =useParams
+ const {itemId} =useParams();
   const [name,SetName]=useState("");
   const [price,SetPrice]=useState( 0);
   const [frontendImage,setfrontendImage]=useState( null);
   const [backendImage,setbackendImage]=useState(null);
   const [category,setCategory]=useState("");
- 
-  const [foodType,setFoodType]=useState("Veg");
+ const [loading,setLoading]=useState(false);
+  const [foodType,setFoodType]=useState("");
   const categories=["Snacks",
             "Main Course",
             "Desserts",
@@ -45,6 +45,7 @@ function EditItem() {
   }
   const handelSubmit=async(e)=>{
     e.preventDefault();
+    setLoading(true);
     try{
       const formData=new FormData()
       formData.append("name",name)
@@ -54,13 +55,14 @@ function EditItem() {
       if(backendImage){
         formData.append("image",backendImage)
       }
-      const result=await axios.post(`${serverUrl}/api/item/add-item`,formData,
+      const result=await axios.put(`${serverUrl}/api/item/edit-item/${itemId}`,formData,
         {withCredentials:true})
         dispatch(setMyShopData(result.data))
-        console.log(result.data);
+        setLoading(false);
+        navigate("/");
     }
     catch(error){
-      console.log(error)
+     setLoading(false);
     }
   }
   useEffect(()=>{
@@ -80,13 +82,12 @@ function EditItem() {
   },[itemId])
 
   useEffect(()=>{
-    if(currentItem){
-        SetName(currentItem.name);
-        SetPrice(currentItem.price);
-        setCategory(currentItem.category);
-        setFoodType(currentItem.foodType);
-        setfrontendImage(currentItem.image);
-    }
+        SetName(currentItem?.name||"");
+        SetPrice(currentItem?.price || 0);
+        setCategory(currentItem?.category || "");
+        setFoodType(currentItem?.foodType || "Veg");
+        setfrontendImage(currentItem?.image || null);
+    
   },[currentItem])
 
   return (
@@ -158,8 +159,8 @@ function EditItem() {
           
             <button className="w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg
             font-semibold shadow-md hover:bg-orange-600 hover:shadow-lg transition-all
-            duration-200 cursor-pointer" >
-                Save
+            duration-200 cursor-pointer" disabled={loading}>
+              {loading? <ClipLoader size={20} color='white'/>:"Save"}
             </button>
             </form>
       </div>

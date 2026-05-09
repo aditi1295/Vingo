@@ -13,6 +13,7 @@ import { IoReceiptOutline } from "react-icons/io5";
 
 function Nav() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { userData, currentCity } = useSelector((state) => state.user);
   const {myShopData}=useSelector((state)=>state.owner);
   const [showInfo, setShowInfo] = useState(false);
@@ -101,15 +102,14 @@ function Nav() {
         { myShopData && <>
             <button
               className=" hidden md:flex items-center gap-1 p-2 cursor-pointer rounded-full
-            bg-[#ff4d2d]/10 text-[#ff4d2d]"
-            >
+            bg-[#ff4d2d]/10 text-[#ff4d2d]" onClick={()=>navigate("/add-item")}>
               <FaPlus size={20} />
               <span>Add Food Item</span>
             </button>
             <button
               className="  md:hidden flex items-center p-2 cursor-pointer rounded-full
-            bg-[#ff4d2d]/10 text-[#ff4d2d]"
-            >
+            bg-[#ff4d2d]/10 text-[#ff4d2d]"onClick={()=>navigate("/add-item")}>
+            
               <FaPlus size={20} />
             </button>
             </>}
@@ -160,9 +160,11 @@ function Nav() {
             <div className="text-[17px] font-semibold">
               {userData?.fullName}
             </div>
-            <div className="md:hidden text-[#ff4d2d] font-semibold cursor-pointer">
-              My Orders
-            </div>
+            {userData?.role == "user" && (
+              <div className="md:hidden text-[#ff4d2d] font-semibold cursor-pointer">
+                My Orders
+              </div>
+            )}
             <div
               className="text-[#ff4d2d] font-semibold cursor-pointer"
               onClick={handleLogOut}
