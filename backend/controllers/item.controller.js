@@ -114,3 +114,26 @@ export const deleteItem=async(req,res)=>{
     }
 }
 
+export const getItemByCity=async(req,res)=>{
+    try {
+        const { city } = req.params;
+        if (!city) {
+            return res.status(400).json({ message: "City is required" });
+        }
+        const shops = await Shop.find({ 
+            city:{ $regex: new RegExp(`${city}`, "i") } 
+        }).populate('items')
+        if(!shops || shops.length === 0){
+            return res.status(404).json({ message: "No shops found in this city" });
+        }
+        const shopId=shops.map(shop=>shop._id);
+        const items=await Item.find({shop:{$in:shopId}}).populate('shop');
+        res.status(200).json(items);
+        
+    } catch (error) {
+        res.status(500).json({
+            message:`Get Items By City Error ${error.message}`
+        });
+        
+    }
+}
