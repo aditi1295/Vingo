@@ -1,5 +1,6 @@
 import { createSlice,current } from "@reduxjs/toolkit";
 
+
 // ye user ka sara data store karegi
 const userSlice = createSlice({
     name: "user",
@@ -8,6 +9,8 @@ const userSlice = createSlice({
         currentCity: "",
         currentState: "",
         currentAddress:"",
+        shopsInMyCity: null,
+        itemsInMyCity: null // ye tab tak null rahega jab tak user ka data load nahi ho jata
          // ye tab tak true rahega jab tak user ka data load nahi ho jata
         
     },
@@ -27,9 +30,16 @@ const userSlice = createSlice({
        
     setCurrentAddress:(state,action)=>{
         state.currentAddress=action.payload;   
+    },
+    setShopsInMyCity:(state,action)=>{
+        state.shopsInMyCity=action.payload;
+    },
+    setItemsInMyCity:(state,action)=>{
+        state.itemsInMyCity=action.payload;
     }
 
 
 }});
-export const { setUserData, setCurrentCity, setCurrentState, setCurrentAddress } = userSlice.actions;
+export const { setUserData, setCurrentCity, setCurrentState, setCurrentAddress, 
+    setShopsInMyCity, setItemsInMyCity } = userSlice.actions;
 export default userSlice.reducer;

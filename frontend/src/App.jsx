@@ -13,6 +13,8 @@ import useGetMyShop from './hooks/useGetMyShop.jsx'
 import CreateEditShop from './pages/CreateEditShop.jsx'
 import { useDispatch } from 'react-redux'
 import EditItem from './pages/EditItem.jsx'
+import useGetShopByCity from './hooks/useGetShopByCity.jsx'
+import useGetItemByCity from './hooks/useGetItemByCity'
 
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
   useGetCurrentUser();
   useGetCity();
   useGetMyShop();
+  useGetShopByCity();
+  useGetItemByCity
 
 
   return (
