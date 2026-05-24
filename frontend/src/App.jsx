@@ -25,7 +25,7 @@ function App() {
   useGetCity();
   useGetMyShop();
   useGetShopByCity();
-  useGetItemByCity
+  useGetItemByCity();
 
 
   return (

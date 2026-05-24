@@ -6,7 +6,7 @@ import { useState } from "react";
 import { FaUtensils } from "react-icons/fa6";
 import { serverUrl } from "../App";
 import { setMyShopData } from "../redux/ownerSlice";
-import { ClimbingBoxLoader } from "react-spinners";
+import { ClimbingBoxLoader, ClipLoader } from "react-spinners";
 import axios from "axios";
 
 function CreateEditShop() {
